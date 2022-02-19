@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script>
+        function highGoalPlus() {
+            let value = document.getElementById("higoal").value
+            document.getElementById("higoal").value = parseInt(value) + 1
+        }
+    </script>
+
+    <style>
+        .css-button-3d--rose {
+            min-width: 130px;
+            height: 40px;
+            color: #fff;
+            padding: 5px 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: inline-block;
+            outline: none;
+            border-radius: 5px;
+            border: none;
+            background: #ff6392;
+            box-shadow: 0 5px #ff0a78;
+        }
+
+        .css-button-3d--rose:hover {
+            box-shadow: 0 3px #ff0a78;
+            top: 1px;
+        }
+
+        .css-button-3d--rose:active {
+            box-shadow: 0 0 #ff0a78;
+            top: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>TeleOp</h1>
+    <label for="higoal">High Goal</label>
+    <input id="higoal" type="number" value=0>
+    <button class="css-button-3d--rose" onclick="highGoalPlus()">+</b></button>
+</body>
+
+</html>
