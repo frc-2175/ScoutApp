@@ -2,48 +2,137 @@
 <html>
 
 <head>
-    <script>
-        function highGoalPlus() {
-            let value = document.getElementById("higoal").value
-            document.getElementById("higoal").value = parseInt(value) + 1
-        }
-    </script>
+	<script>
+		function teleHi(change) {
+			let value = document.getElementById("teleHiGoal").value
+			document.getElementById("teleHiGoal").value = Math.max(parseInt(value) + change, 0)
+		}
 
-    <style>
-        .css-button-3d--rose {
-            min-width: 130px;
-            height: 40px;
-            color: #fff;
-            padding: 5px 10px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            display: inline-block;
-            outline: none;
-            border-radius: 5px;
-            border: none;
-            background: #ff6392;
-            box-shadow: 0 5px #ff0a78;
-        }
+		function teleLo(change) {
+			let value = document.getElementById("teleLoGoal").value
+			document.getElementById("teleLoGoal").value = Math.max(parseInt(value) + change, 0)
+		}
 
-        .css-button-3d--rose:hover {
-            box-shadow: 0 3px #ff0a78;
-            top: 1px;
-        }
+		function autoHi(change) {
+			let value = document.getElementById("autoHiGoal").value
+			document.getElementById("autoHiGoal").value = Math.max(parseInt(value) + change, 0)
+		}
 
-        .css-button-3d--rose:active {
-            box-shadow: 0 0 #ff0a78;
-            top: 5px;
-        }
-    </style>
+		function autoLo(change) {
+			let value = document.getElementById("autoLoGoal").value
+			document.getElementById("autoLoGoal").value = Math.max(parseInt(value) + change, 0)
+		}
+	</script>
+
+	<style>
+		* {
+			background-color: hsl(0, 0%, 15%);
+			color: #fff;
+		}
+
+		.button-3d {
+			width: 30%;
+			height: 2em;
+			color: #fff;
+			padding: 5px 10px;
+			font-weight: bold;
+			font-size: 2em;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			position: relative;
+			display: inline-block;
+			outline: none;
+			border-radius: 5px;
+			border: none;
+		}
+
+		.button-3d.red {
+			background: #ef233c;
+			box-shadow: 0 5px #d90429;
+		}
+
+		.button-3d.red:hover {
+			box-shadow: 0 3px #d90429;
+			top: 1px;
+		}
+
+		.button-3d.red:active {
+			box-shadow: 0 0 #d90429;
+			top: 5px;
+		}
+
+		.button-3d.sky {
+			background: #3a86ff;
+			box-shadow: 0 5px #4433ff;
+		}
+
+		.button-3d.sky:hover {
+			box-shadow: 0 3px #4433ff;
+			top: 1px;
+		}
+
+		.button-3d.sky:active {
+			box-shadow: 0 0 #4433ff;
+			top: 5px;
+		}
+
+		.wrapper {
+			display: flex;
+			flex-wrap: wrap;
+			flex-direction: column;
+			text-align: center;
+		}
+
+		input {
+			text-align: center;
+			font-size: 2em;
+			width: 30%;
+			height: 2em;
+			font-weight: bold;
+			outline: none;
+			border-radius: 5px;
+			border: none;
+			position: relative;
+			background-color: #fff;
+			color: #000;
+			box-shadow: 0 5px #999999;
+		}
+	</style>
 </head>
 
 <body>
-    <h1>TeleOp</h1>
-    <label for="higoal">High Goal</label>
-    <input id="higoal" type="number" value=0>
-    <button class="css-button-3d--rose" onclick="highGoalPlus()">+</b></button>
+	<div class="wrapper">
+		<div class="auto">
+			<h1>Auto</h1>
+			<div>
+				<h3>High Goal</h3>
+				<button class="button-3d sky" onclick="autoHi(-1)">-</button>
+				<input id="autoHiGoal" type="number" value="0" min="0">
+				<button class="button-3d red" onclick="autoHi(1)">+</button>
+			</div>
+			<div>
+				<h3>Low Goal</h3>
+				<button class="button-3d sky" onclick="autoLo(-1)">-</button>
+				<input id="autoLoGoal" type="number" value="0" min="0">
+				<button class="button-3d red" onclick="autoLo(1)">+</button>
+			</div>
+		</div>
+		<div class="teleop">
+			<h1>TeleOP</h1>
+			<div>
+				<h3>High Goal</h3>
+				<button class="button-3d sky" onclick="teleHi(-1)">-</button>
+				<input id="teleHiGoal" type="number" value="0" min="0">
+				<button class="button-3d red" onclick="teleHi(1)">+</button>
+			</div>
+			<div>
+				<h3>Low Goal</h3>
+				<button class="button-3d sky" onclick="teleLo(-1)">-</button>
+				<input id="teleLoGoal" type="number" value="0" min="0">
+				<button class="button-3d red" onclick="teleLo(1)">+</button>
+			</div>
+		</div>
+	</div>
 </body>
 
 </html>
