@@ -4,34 +4,75 @@
 <head>
 	<script>
 		function teleHi(change) {
-			let value = document.getElementById("teleHiGoal").value
+			const value = document.getElementById("teleHiGoal").value
 			document.getElementById("teleHiGoal").value = Math.max(parseInt(value) + change, 0)
 		}
 
 		function teleLo(change) {
-			let value = document.getElementById("teleLoGoal").value
+			const value = document.getElementById("teleLoGoal").value
 			document.getElementById("teleLoGoal").value = Math.max(parseInt(value) + change, 0)
 		}
 
 		function autoHi(change) {
-			let value = document.getElementById("autoHiGoal").value
+			const value = document.getElementById("autoHiGoal").value
 			document.getElementById("autoHiGoal").value = Math.max(parseInt(value) + change, 0)
 		}
 
 		function autoLo(change) {
-			let value = document.getElementById("autoLoGoal").value
+			const value = document.getElementById("autoLoGoal").value
 			document.getElementById("autoLoGoal").value = Math.max(parseInt(value) + change, 0)
+		}
+
+		function exportData() {
+			const teleHi = document.getElementById("teleHiGoal").value
+			const teleLo = document.getElementById("teleLoGoal").value
+			const autoHi = document.getElementById("autoHiGoal").value
+			const autoLo = document.getElementById("autoLoGoal").value
+
+			const matchData = {
+				teleop: {
+					hi: teleHi,
+					lo: teleLo
+				},
+				auto: {
+					hi: autoHi,
+					lo: autoLo
+				}
+			}
+
+			// TODO: something with this matchdata
 		}
 	</script>
 
 	<style>
+		/* Chrome, Safari, Edge, Opera */
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+
+		/* Firefox */
+		input[type=number] {
+			-moz-appearance: textfield;
+		}
+
+		@font-face {
+			font-family: 'Noto Sans';
+			font-style: normal;
+			font-weight: 400;
+			src: url(https://fonts.gstatic.com/s/notosans/v25/o-0IIpQlx3QUlC5A4PNr5TRA.woff2) format('woff2');
+			unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+		}
+
 		* {
 			background-color: hsl(0, 0%, 15%);
 			color: #fff;
+			font-family: "Noto Sans";
 		}
 
 		.button-3d {
-			width: 30%;
+			width: 35%;
 			height: 2em;
 			color: #fff;
 			padding: 5px 10px;
@@ -46,6 +87,14 @@
 			border: none;
 		}
 
+		.button-3d:hover {
+			top: 1px;
+		}
+
+		.button-3d:active {
+			top: 5px;
+		}
+
 		.button-3d.red {
 			background: #ef233c;
 			box-shadow: 0 5px #d90429;
@@ -53,12 +102,10 @@
 
 		.button-3d.red:hover {
 			box-shadow: 0 3px #d90429;
-			top: 1px;
 		}
 
 		.button-3d.red:active {
 			box-shadow: 0 0 #d90429;
-			top: 5px;
 		}
 
 		.button-3d.sky {
@@ -68,12 +115,42 @@
 
 		.button-3d.sky:hover {
 			box-shadow: 0 3px #4433ff;
-			top: 1px;
 		}
 
 		.button-3d.sky:active {
 			box-shadow: 0 0 #4433ff;
-			top: 5px;
+		}
+
+		.button-3d.green {
+			color: #fff;
+			margin-top: 1em;
+			width: 93%;
+			background: #80ed99;
+			box-shadow: 0 5px #57cc99;
+		}
+
+		.button-3d.green:hover {
+			box-shadow: 0 3px #57cc99;
+		}
+
+		.button-3d.green:active {
+			box-shadow: 0 0 #57cc99;
+		}
+
+		.button-3d.white {
+			color: #000;
+			margin-top: 1em;
+			width: 93%;
+			background: #fff;
+			box-shadow: 0 5px #adb5bd;
+		}
+
+		.button-3d.white:hover {
+			box-shadow: 0 3px #adb5bd;
+		}
+
+		.button-3d.white:active {
+			box-shadow: 0 0 #adb5bd;
 		}
 
 		.wrapper {
@@ -86,7 +163,7 @@
 		input {
 			text-align: center;
 			font-size: 2em;
-			width: 30%;
+			width: 20%;
 			height: 2em;
 			font-weight: bold;
 			outline: none;
@@ -118,7 +195,7 @@
 			</div>
 		</div>
 		<div class="teleop">
-			<h1>TeleOP</h1>
+			<h1>Teleop</h1>
 			<div>
 				<h3>High Goal</h3>
 				<button class="button-3d sky" onclick="teleHi(-1)">-</button>
@@ -131,6 +208,9 @@
 				<input id="teleLoGoal" type="number" value="0" min="0">
 				<button class="button-3d red" onclick="teleLo(1)">+</button>
 			</div>
+		</div>
+		<div>
+			<button class="button-3d green" onclick="exportData()">Export!</button>
 		</div>
 	</div>
 </body>
