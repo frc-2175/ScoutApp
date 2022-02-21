@@ -3,33 +3,45 @@
 
 <head>
 	<script>
+		function getValue(id) {
+			return document.getElementById(id).value || 0
+		}
+
+		function setValue(id, value) {
+			document.getElementById(id).value = value
+		}
+
 		function teleHi(change) {
-			const value = document.getElementById("teleHiGoal").value
-			document.getElementById("teleHiGoal").value = Math.max(parseInt(value) + change, 0)
+			const value = getValue("teleHiGoal")
+			setValue("teleHiGoal", Math.max(parseInt(value) + change, 0))
 		}
 
 		function teleLo(change) {
-			const value = document.getElementById("teleLoGoal").value
-			document.getElementById("teleLoGoal").value = Math.max(parseInt(value) + change, 0)
+			const value = getValue("teleLoGoal")
+			setValue("teleLoGoal", Math.max(parseInt(value) + change, 0))
 		}
 
 		function autoHi(change) {
-			const value = document.getElementById("autoHiGoal").value
-			document.getElementById("autoHiGoal").value = Math.max(parseInt(value) + change, 0)
+			const value = getValue("autoHiGoal")
+			setValue("autoHiGoal", Math.max(parseInt(value) + change, 0))
 		}
 
 		function autoLo(change) {
-			const value = document.getElementById("autoLoGoal").value
-			document.getElementById("autoLoGoal").value = Math.max(parseInt(value) + change, 0)
+			const value = getValue("autoLoGoal")
+			setValue("autoLoGoal", Math.max(parseInt(value) + change, 0))
 		}
 
 		function exportData() {
-			const teleHi = document.getElementById("teleHiGoal").value
-			const teleLo = document.getElementById("teleLoGoal").value
-			const autoHi = document.getElementById("autoHiGoal").value
-			const autoLo = document.getElementById("autoLoGoal").value
+			const match = getValue("matchNumber")
+			const team = getValue("teamNumber")
+			const teleHi = getValue("teleHiGoal")
+			const teleLo = getValue("teleLoGoal")
+			const autoHi = getValue("autoHiGoal")
+			const autoLo = getValue("autoLoGoal")
 
 			const matchData = {
+				match: match,
+				team: team,
 				teleop: {
 					hi: teleHi,
 					lo: teleLo
@@ -39,6 +51,8 @@
 					lo: autoLo
 				}
 			}
+
+			console.log(matchData)
 
 			// TODO: something with this matchdata
 		}
@@ -95,33 +109,33 @@
 			top: 5px;
 		}
 
-		.button-3d.red {
+		.red {
 			background: #ef233c;
 			box-shadow: 0 5px #d90429;
 		}
 
-		.button-3d.red:hover {
+		.red:hover {
 			box-shadow: 0 3px #d90429;
 		}
 
-		.button-3d.red:active {
+		.red:active {
 			box-shadow: 0 0 #d90429;
 		}
 
-		.button-3d.sky {
+		.sky {
 			background: #3a86ff;
 			box-shadow: 0 5px #4433ff;
 		}
 
-		.button-3d.sky:hover {
+		.sky:hover {
 			box-shadow: 0 3px #4433ff;
 		}
 
-		.button-3d.sky:active {
+		.sky:active {
 			box-shadow: 0 0 #4433ff;
 		}
 
-		.button-3d.green {
+		.green {
 			color: #fff;
 			margin-top: 1em;
 			width: 93%;
@@ -129,15 +143,15 @@
 			box-shadow: 0 5px #57cc99;
 		}
 
-		.button-3d.green:hover {
+		.green:hover {
 			box-shadow: 0 3px #57cc99;
 		}
 
-		.button-3d.green:active {
+		.green:active {
 			box-shadow: 0 0 #57cc99;
 		}
 
-		.button-3d.white {
+		.white {
 			color: #000;
 			margin-top: 1em;
 			width: 93%;
@@ -145,11 +159,11 @@
 			box-shadow: 0 5px #adb5bd;
 		}
 
-		.button-3d.white:hover {
+		.white:hover {
 			box-shadow: 0 3px #adb5bd;
 		}
 
-		.button-3d.white:active {
+		.white:active {
 			box-shadow: 0 0 #adb5bd;
 		}
 
@@ -158,6 +172,26 @@
 			flex-wrap: wrap;
 			flex-direction: column;
 			text-align: center;
+		}
+
+		.wrapper input {
+			margin-top: auto;
+			margin-bottom: auto;
+		}
+
+		.wrapper>div>div button {
+			margin-top: auto;
+			margin-bottom: auto;
+		}
+
+		.wrapper h1 {
+			margin-top: 0.25em;
+			margin-bottom: auto;
+		}
+
+		.wrapper h3 {
+			margin-top: 0.5em;
+			margin-bottom: 0.25em;
 		}
 
 		input {
@@ -174,23 +208,42 @@
 			color: #000;
 			box-shadow: 0 5px #999999;
 		}
+
+		.matchInfo>div {
+			margin-top: 1em;
+		}
+
+		.matchInfo input {
+			height: 1.5em;
+			font-size: 1.5em;
+		}
 	</style>
 </head>
 
 <body>
 	<div class="wrapper">
+		<div class="matchInfo">
+			<div>
+				<h2 style="display: inline;">Match Number: </h2>
+				<input id="matchNumber" type="number" placeholder="0">
+			</div>
+			<div>
+				<h2 style="display: inline;">Team Number: </h2>
+				<input id="teamNumber" type="number" placeholder="0">
+			</div>
+		</div>
 		<div class="auto">
 			<h1>Auto</h1>
 			<div>
 				<h3>High Goal</h3>
 				<button class="button-3d sky" onclick="autoHi(-1)">-</button>
-				<input id="autoHiGoal" type="number" value="0" min="0">
+				<input id="autoHiGoal" type="number" placeholder="0" min="0">
 				<button class="button-3d red" onclick="autoHi(1)">+</button>
 			</div>
 			<div>
 				<h3>Low Goal</h3>
 				<button class="button-3d sky" onclick="autoLo(-1)">-</button>
-				<input id="autoLoGoal" type="number" value="0" min="0">
+				<input id="autoLoGoal" type="number" placeholder="0" min="0">
 				<button class="button-3d red" onclick="autoLo(1)">+</button>
 			</div>
 		</div>
@@ -199,13 +252,13 @@
 			<div>
 				<h3>High Goal</h3>
 				<button class="button-3d sky" onclick="teleHi(-1)">-</button>
-				<input id="teleHiGoal" type="number" value="0" min="0">
+				<input id="teleHiGoal" type="number" placeholder="0" min="0">
 				<button class="button-3d red" onclick="teleHi(1)">+</button>
 			</div>
 			<div>
 				<h3>Low Goal</h3>
 				<button class="button-3d sky" onclick="teleLo(-1)">-</button>
-				<input id="teleLoGoal" type="number" value="0" min="0">
+				<input id="teleLoGoal" type="number" placeholder="0" min="0">
 				<button class="button-3d red" onclick="teleLo(1)">+</button>
 			</div>
 		</div>
