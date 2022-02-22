@@ -1,72 +1,62 @@
+
 <!DOCTYPE html>
 <html>
 
 <head>
 	<link rel="stylesheet" href="style.css">
 	<script>
-		const key = "Q8VmErPZQKVkOGqbT76NUCU4FhIurBBNVNhWRvRi2dAce33qRWxnCeMvFJntmFcY"
+		/* eslint-disable no-unused-vars */
+		const key = "Q8VmErPZQKVkOGqbT76NUCU4FhIurBBNVNhWRvRi2dAce33qRWxnCeMvFJntmFcY";
 
 		function getValue(id) {
-			return document.getElementById(id).value || 0
+			return parseInt(document.getElementById(id).value) || 0;
 		}
 
 		function setValue(id, value) {
-			document.getElementById(id).value = value
+			document.getElementById(id).value = value;
 		}
 
-		function teleHi(change) {
-			const value = getValue("teleHiGoal")
-			setValue("teleHiGoal", Math.max(parseInt(value) + change, 0))
+		function increment(id) {
+			setValue(id, getValue(id) + 1);
 		}
 
-		function teleLo(change) {
-			const value = getValue("teleLoGoal")
-			setValue("teleLoGoal", Math.max(parseInt(value) + change, 0))
-		}
-
-		function autoHi(change) {
-			const value = getValue("autoHiGoal")
-			setValue("autoHiGoal", Math.max(parseInt(value) + change, 0))
-		}
-
-		function autoLo(change) {
-			const value = getValue("autoLoGoal")
-			setValue("autoLoGoal", Math.max(parseInt(value) + change, 0))
+		function decrement(id) {
+			setValue(id, Math.max(getValue(id) - 1, 0));
 		}
 
 		async function getTeam() {
-			let url = "https://www.thebluealliance.com/api/v3/team/frc" + getValue("teamNumber")
+			const url = "https://www.thebluealliance.com/api/v3/team/frc" + getValue("teamNumber");
 			let teamName = await fetch(url, { headers: { "X-TBA-Auth-Key": key } })
-				.then(response => response.json())
-				.then(team => team.nickname);
+				.then((response) => response.json())
+				.then((team) => team.nickname);
 
-			teamName = teamName === undefined ? "No team with that number :(" : teamName
+			teamName = teamName === undefined ? "No team with that number :(" : teamName;
 
-			document.getElementById("teamName").innerText = teamName
+			document.getElementById("teamName").innerText = teamName;
 		}
 
 		function exportData() {
-			const match = getValue("matchNumber")
-			const team = getValue("teamNumber")
-			const teleHi = getValue("teleHiGoal")
-			const teleLo = getValue("teleLoGoal")
-			const autoHi = getValue("autoHiGoal")
-			const autoLo = getValue("autoLoGoal")
+			const match = getValue("matchNumber");
+			const team = getValue("teamNumber");
+			const teleHi = getValue("teleHiGoal");
+			const teleLo = getValue("teleLoGoal");
+			const autoHi = getValue("autoHiGoal");
+			const autoLo = getValue("autoLoGoal");
 
 			const matchData = {
-				match: match,
-				team: team,
+				match,
+				team,
 				teleop: {
 					hi: teleHi,
-					lo: teleLo
+					lo: teleLo,
 				},
 				auto: {
 					hi: autoHi,
-					lo: autoLo
-				}
-			}
+					lo: autoLo,
+				},
+			};
 
-			console.log(matchData)
+			console.log(matchData);
 
 			// TODO: something with this matchdata
 		}
@@ -91,30 +81,30 @@
 			<h1>Auto</h1>
 			<div>
 				<h3>High Goal</h3>
-				<button class="button-3d red" onclick="autoHi(-1)">-</button>
+				<button class="button-3d red" onclick="decrement('autoHiGoal')">-</button>
 				<input id="autoHiGoal" type="number" placeholder="0" min="0">
-				<button class="button-3d green" onclick="autoHi(1)">+</button>
+				<button class="button-3d green" onclick="increment('autoHiGoal')">+</button>
 			</div>
 			<div>
 				<h3>Low Goal</h3>
-				<button class="button-3d red" onclick="autoLo(-1)">-</button>
+				<button class="button-3d red" onclick="decrement('autoLoGoal')">-</button>
 				<input id="autoLoGoal" type="number" placeholder="0" min="0">
-				<button class="button-3d green" onclick="autoLo(1)">+</button>
+				<button class="button-3d green" onclick="increment('autoLoGoal')">+</button>
 			</div>
 		</div>
 		<div class="teleop">
 			<h1>Teleop</h1>
 			<div>
 				<h3>High Goal</h3>
-				<button class="button-3d red" onclick="teleHi(-1)">-</button>
+				<button class="button-3d red" onclick="decrement('teleHiGoal')">-</button>
 				<input id="teleHiGoal" type="number" placeholder="0" min="0">
-				<button class="button-3d green" onclick="teleHi(1)">+</button>
+				<button class="button-3d green" onclick="increment('teleHiGoal')">+</button>
 			</div>
 			<div>
 				<h3>Low Goal</h3>
-				<button class="button-3d red" onclick="teleLo(-1)">-</button>
+				<button class="button-3d red" onclick="decrement('teleLoGoal')">-</button>
 				<input id="teleLoGoal" type="number" placeholder="0" min="0">
-				<button class="button-3d green" onclick="teleLo(1)">+</button>
+				<button class="button-3d green" onclick="increment('teleLoGoal')">+</button>
 			</div>
 		</div>
 		<div>
