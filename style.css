@@ -1,0 +1,142 @@
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+	-moz-appearance: textfield;
+}
+
+@font-face {
+	font-family: 'Noto Sans';
+	font-style: normal;
+	font-weight: 400;
+	src: url(https://fonts.gstatic.com/s/notosans/v25/o-0IIpQlx3QUlC5A4PNr5TRA.woff2) format('woff2');
+	unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+* {
+	background-color: hsl(0, 0%, 15%);
+	color: #fff;
+	font-family: "Noto Sans";
+}
+
+.button-3d {
+	width: 35%;
+	height: 2em;
+	color: #fff;
+	padding: 5px 10px;
+	font-weight: bold;
+	font-size: 2em;
+	cursor: pointer;
+	transition: all 0.3s ease;
+	position: relative;
+	display: inline-block;
+	outline: none;
+	border-radius: 5px;
+	border: none;
+}
+
+.button-3d:hover {
+	top: 1px;
+}
+
+.button-3d:active {
+	top: 5px;
+}
+
+.red {
+	background: #ef233c;
+	box-shadow: 0 5px #d90429;
+}
+
+.red:hover {
+	box-shadow: 0 3px #d90429;
+}
+
+.red:active {
+	box-shadow: 0 0 #d90429;
+}
+
+.sky {
+	background: #3a86ff;
+	margin-top: 1em;
+	width: 92.5%;
+	box-shadow: 0 5px #4433ff;
+}
+
+.sky:hover {
+	box-shadow: 0 3px #4433ff;
+}
+
+.sky:active {
+	box-shadow: 0 0 #4433ff;
+}
+
+.green {
+	color: #fff;
+	background: #80ed99;
+	box-shadow: 0 5px #57cc99;
+}
+
+.green:hover {
+	box-shadow: 0 3px #57cc99;
+}
+
+.green:active {
+	box-shadow: 0 0 #57cc99;
+}
+
+.wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+	text-align: center;
+}
+
+.wrapper input {
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.wrapper>div>div button {
+	margin-top: auto;
+	margin-bottom: auto;
+}
+
+.wrapper h1 {
+	margin-top: 0.25em;
+	margin-bottom: auto;
+}
+
+.wrapper h3 {
+	margin-top: 0.5em;
+	margin-bottom: 0.25em;
+}
+
+input {
+	text-align: center;
+	font-size: 2em;
+	width: 20%;
+	height: 2em;
+	font-weight: bold;
+	outline: none;
+	border-radius: 5px;
+	border: none;
+	position: relative;
+	background-color: #fff;
+	color: #000;
+	box-shadow: 0 5px #999999;
+}
+
+.matchInfo>div {
+	margin-top: 1em;
+}
+
+.matchInfo input {
+	height: 1.5em;
+	font-size: 1.5em;
+}
