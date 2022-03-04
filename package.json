@@ -1,7 +1,9 @@
 {
   "dependencies": {
     "axios": "^0.26.0",
+    "firebase": "^9.6.7",
     "googleapis": "^95.0.0",
-    "promisify": "^0.0.3"
+    "promisify": "^0.0.3",
+    "rollup": "^2.69.0"
   }
 }

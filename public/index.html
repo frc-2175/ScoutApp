@@ -1,10 +1,56 @@
-
 <!DOCTYPE html>
 <html>
 
 <head>
-	<link rel="stylesheet" href="style.css">
-	<script>
+	<title>Scout App</title>
+	<meta name="theme-color" content=hsl(0, 0%, 15%) />
+	<link rel="stylesheet" href="toasting.css" />
+	<script src="toasting.js"></script>
+	<link rel="apple-touch-icon" href="apple-touch-icon.png">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<meta name="mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+	<meta name="apple-mobile-web-app-title" />
+
+	<script type="module">
+		// Import the functions you need from the SDKs you need
+		import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
+		import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-database.js";
+		// TODO: Add SDKs for Firebase products that you want to use
+		// https://firebase.google.com/docs/web/setup#available-libraries
+
+		// Your web app's Firebase configuration
+		const firebaseConfig = {
+			apiKey: "AIzaSyCZaXFdEf3DJaOp5C3m1qp_LZ2RhW5_vBA",
+			authDomain: "scout-b39c0.firebaseapp.com",
+			databaseURL: "https://scout-b39c0-default-rtdb.firebaseio.com",
+			projectId: "scout-b39c0",
+			storageBucket: "scout-b39c0.appspot.com",
+			messagingSenderId: "709936631965",
+			appId: "1:709936631965:web:f5de22c8eb8fc69f354474"
+		};
+
+		// Initialize Firebase
+		const app = initializeApp(firebaseConfig);
+		function writeMatchData(matchNumber, teamNumber, teleHiGoal, teleLoGoal, autoHiGoal, autoLoGoal) {
+			const db = getDatabase();
+			set(ref(db, `matches/${matchNumber}/${teamNumber}`), {
+				matchNumber: matchNumber,
+				teamNumber: teamNumber,
+				teleop: {
+					teleHiGoal,
+					teleLoGoal
+				},
+				auto: {
+					autoHiGoal: autoHiGoal,
+					autoLoGoal: autoLoGoal
+				}
+			});
+		}
+
 		/* eslint-disable no-unused-vars */
 		const key = "Q8VmErPZQKVkOGqbT76NUCU4FhIurBBNVNhWRvRi2dAce33qRWxnCeMvFJntmFcY";
 
@@ -22,6 +68,30 @@
 
 		function decrement(id) {
 			setValue(id, Math.max(getValue(id) - 1, 0));
+		}
+
+		function clearFields() {
+			const idList = ["matchNumber", "teamNumber", "autoHiGoal", "autoLoGoal", "teleHiGoal", "teleLoGoal"]
+			idList.forEach((item) => {
+				setValue(item, "")
+			})
+		}
+
+		function verifyMatchData() {
+			let errList = [];
+			if (getValue("matchNumber") == "") {
+				errList.push("No match number set")
+			}
+			if (getValue("teamNumber") == "") {
+				errList.push("No team number set")
+			}
+			if (isNaN(parseInt(getValue("teamNumber")))) {
+				errList.push("Team number is NaN")
+			}
+			if (0 > parseInt(getValue("teamNumber")) || parseInt(getValue("teamNumber")) > 9999) {
+				errList.push("Team number too large/small")
+			}
+			return errList;
 		}
 
 		async function getTeam() {
@@ -42,26 +112,52 @@
 			const teleLo = getValue("teleLoGoal");
 			const autoHi = getValue("autoHiGoal");
 			const autoLo = getValue("autoLoGoal");
+			let submitError = null;
+			let verifyErrs = verifyMatchData();
 
-			const matchData = {
-				match,
-				team,
-				teleop: {
-					hi: teleHi,
-					lo: teleLo,
-				},
-				auto: {
-					hi: autoHi,
-					lo: autoLo,
-				},
-			};
-
-			console.log(matchData);
-
-			// TODO: something with this matchdata
+			if (0 < verifyErrs.length) {
+				toasting.create({
+					"title": "Error!",
+					"text": `Error(s) in data, check team and match number and try again. (${JSON.stringify(verifyErrs)})`,
+					"timeout": 5000,
+				});
+			}
+			else {
+				try {
+					writeMatchData(match, team, teleHi, teleLo, autoHi, autoLo);
+				}
+				catch (e) {
+					submitError = e;
+					console.error(e);
+				}
+				finally {
+					if (submitError !== null) {
+						toasting.create({
+							"title": "Error!",
+							"text": `Error posting data to DB: "${submitError}"`,
+							"timeout": 5000,
+						});
+					}
+					else {
+						toasting.create({
+							"title": "Success!",
+							"text": "Posted data to DB successfully.",
+							"timeout": 5000,
+						});
+						clearFields();
+					}
+				}
+			}
 		}
+		window.getTeam = getTeam;
+		window.exportData = exportData;
+		window.increment = increment;
+		window.decrement = decrement;
+		window.verifyMatchData = verifyMatchData;
+		window.getValue = getValue;
 	</script>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="style.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
 
 <body>
@@ -69,11 +165,11 @@
 		<div class="matchInfo">
 			<div>
 				<h2 style="display: inline;">Match Number: </h2>
-				<input id="matchNumber" type="number" placeholder="0">
+				<input id="matchNumber" type="tel" placeholder="0">
 			</div>
 			<div>
 				<h2 style="display: inline;">Team Number: </h2>
-				<input id="teamNumber" type="number" placeholder="0" onchange="getTeam()">
+				<input id="teamNumber" type="tel" placeholder="0" onchange="getTeam()">
 				<h3 id="teamName"><br></h3>
 			</div>
 		</div>
@@ -82,13 +178,13 @@
 			<div>
 				<h3>High Goal</h3>
 				<button class="button-3d red" onclick="decrement('autoHiGoal')">-</button>
-				<input id="autoHiGoal" type="number" placeholder="0" min="0">
+				<input id="autoHiGoal" type="tel" placeholder="0" min="0">
 				<button class="button-3d green" onclick="increment('autoHiGoal')">+</button>
 			</div>
 			<div>
 				<h3>Low Goal</h3>
 				<button class="button-3d red" onclick="decrement('autoLoGoal')">-</button>
-				<input id="autoLoGoal" type="number" placeholder="0" min="0">
+				<input id="autoLoGoal" type="tel" placeholder="0" min="0">
 				<button class="button-3d green" onclick="increment('autoLoGoal')">+</button>
 			</div>
 		</div>
@@ -97,13 +193,13 @@
 			<div>
 				<h3>High Goal</h3>
 				<button class="button-3d red" onclick="decrement('teleHiGoal')">-</button>
-				<input id="teleHiGoal" type="number" placeholder="0" min="0">
+				<input id="teleHiGoal" type="tel" placeholder="0" min="0">
 				<button class="button-3d green" onclick="increment('teleHiGoal')">+</button>
 			</div>
 			<div>
 				<h3>Low Goal</h3>
 				<button class="button-3d red" onclick="decrement('teleLoGoal')">-</button>
-				<input id="teleLoGoal" type="number" placeholder="0" min="0">
+				<input id="teleLoGoal" type="tel" placeholder="0" min="0">
 				<button class="button-3d green" onclick="increment('teleLoGoal')">+</button>
 			</div>
 		</div>

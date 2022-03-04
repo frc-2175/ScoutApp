@@ -21,5 +21,13 @@ module.exports = {
 			"always",
 		],
 		yoda: "error",
+		"quote-props": [
+			"error",
+			"as-needed"
+		],
+		eqeqeq: [
+			"error",
+			"smart"
+		]
 	},
 };
