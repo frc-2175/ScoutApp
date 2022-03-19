@@ -35,7 +35,7 @@
 
 		// Initialize Firebase
 		const app = initializeApp(firebaseConfig);
-		function writeMatchData(matchNumber, teamNumber, teleHiGoal, teleLoGoal, autoHiGoal, autoLoGoal) {
+		function writeMatchData(matchNumber, teamNumber, teleHiGoal, teleLoGoal, autoHiGoal, autoLoGoal, taxi, notes) {
 			const db = getDatabase();
 			set(ref(db, `matches/${matchNumber}/${teamNumber}`), {
 				matchNumber: matchNumber,
@@ -45,9 +45,11 @@
 					teleLoGoal
 				},
 				auto: {
+					taxi: taxi,
 					autoHiGoal: autoHiGoal,
 					autoLoGoal: autoLoGoal
-				}
+				},
+				notes: notes
 			});
 		}
 
@@ -112,6 +114,8 @@
 			const teleLo = getValue("teleLoGoal");
 			const autoHi = getValue("autoHiGoal");
 			const autoLo = getValue("autoLoGoal");
+			const taxi = getValue("taxi");
+			const notes = getValue("notes");
 			let submitError = null;
 			let verifyErrs = verifyMatchData();
 
@@ -124,7 +128,7 @@
 			}
 			else {
 				try {
-					writeMatchData(match, team, teleHi, teleLo, autoHi, autoLo);
+					writeMatchData(match, team, teleHi, teleLo, autoHi, autoLo, taxi);
 				}
 				catch (e) {
 					submitError = e;
@@ -175,6 +179,10 @@
 		</div>
 		<div class="auto">
 			<h1>Auto</h1>
+			<div class="taxi">
+				<input type="checkbox" id="taxi" name="taxi" class="taxibox">
+				<label for="taxi">Taxi?</label>
+			</div>
 			<div>
 				<h3>High Goal</h3>
 				<button class="button-3d red" onclick="decrement('autoHiGoal')">-</button>
@@ -201,6 +209,12 @@
 				<button class="button-3d red" onclick="decrement('teleLoGoal')">-</button>
 				<input id="teleLoGoal" type="tel" placeholder="0" min="0">
 				<button class="button-3d green" onclick="increment('teleLoGoal')">+</button>
+			</div>
+		</div>
+		<div class="Notes">
+			<h1>Notes</h1>
+			<div>
+				<textarea name="notes" id="notes" cols="0" rows="5"></textarea>
 			</div>
 		</div>
 		<div>
