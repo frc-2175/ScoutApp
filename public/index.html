@@ -145,7 +145,7 @@
 			const autoLo = getValue("autoLoGoal");
 			const event = document.getElementById("eventDropdown").value;
 			const taxi = getValue("taxi");
-			const notes = getValue("notes");
+			const notes = document.getElementById("notes").value;
 
 			let submitError = null;
 			let verifyErrs = verifyMatchData();
@@ -160,7 +160,7 @@
 			else {
 				try {
 
-					writeMatchData(match, team, teleHi, teleLo, autoHi, autoLo, event, taxi, notes);
+					writeMatchData(match, team, teleHi, teleLo, autoHi, autoLo, taxi, notes, event);
 
 				}
 				catch (e) {
