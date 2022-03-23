@@ -35,9 +35,9 @@
 
 		// Initialize Firebase
 		const app = initializeApp(firebaseConfig);
-		function writeMatchData(matchNumber, teamNumber, teleHiGoal, teleLoGoal, autoHiGoal, autoLoGoal) {
+		function writeMatchData(matchNumber, teamNumber, teleHiGoal, teleLoGoal, autoHiGoal, autoLoGoal, event, taxi) {
 			const db = getDatabase();
-			set(ref(db, `matches/${matchNumber}/${teamNumber}`), {
+			set(ref(db, `${event}/matches/${matchNumber}/${teamNumber}`), {
 				matchNumber: matchNumber,
 				teamNumber: teamNumber,
 				teleop: {
@@ -46,7 +46,8 @@
 				},
 				auto: {
 					autoHiGoal: autoHiGoal,
-					autoLoGoal: autoLoGoal
+					autoLoGoal: autoLoGoal,
+					taxi: taxi
 				}
 			});
 		}
@@ -91,6 +92,9 @@
 			if (0 > parseInt(getValue("teamNumber")) || parseInt(getValue("teamNumber")) > 9999) {
 				errList.push("Team number too large/small")
 			}
+			if (document.getElementById("eventDropdown").value == "select-event") {
+				errList.push("No event selected")
+			}
 			return errList;
 		}
 
@@ -103,6 +107,29 @@
 			teamName = teamName === undefined ? "No team with that number :(" : teamName;
 
 			document.getElementById("teamName").innerText = teamName;
+
+			const eventDropdown = document.getElementById("eventDropdown");
+
+			const eventOptions = document.querySelectorAll('.eventOption');
+
+			eventOptions.forEach(event => {
+				event.remove();
+			});
+
+			(await getEvents()).forEach((item) => {
+				let newOption = document.createElement("option")
+				newOption.innerHTML = item.name;
+				newOption.value = item.key;
+				newOption.classList.add("eventOption");
+				eventDropdown.appendChild(newOption);
+			})
+		}
+
+		async function getEvents() {
+			const url = "https://www.thebluealliance.com/api/v3/team/frc" + (getValue("teamNumber") || 2175) + "/events/simple";
+			let currentEvents = await (await fetch(url, { headers: { "X-TBA-Auth-Key": key } })).json()
+
+			return [currentEvents[currentEvents.length - 1], currentEvents[currentEvents.length - 2], currentEvents[currentEvents.length - 3], { "name": "Test Event", "key": "test" }];
 		}
 
 		function exportData() {
@@ -112,6 +139,9 @@
 			const teleLo = getValue("teleLoGoal");
 			const autoHi = getValue("autoHiGoal");
 			const autoLo = getValue("autoLoGoal");
+			const event = document.getElementById("eventDropdown").value;
+			const taxi = document.getElementById("taxiCheckbox").checked;
+
 			let submitError = null;
 			let verifyErrs = verifyMatchData();
 
@@ -124,7 +154,7 @@
 			}
 			else {
 				try {
-					writeMatchData(match, team, teleHi, teleLo, autoHi, autoLo);
+					writeMatchData(match, team, teleHi, teleLo, autoHi, autoLo, event, taxi);
 				}
 				catch (e) {
 					submitError = e;
@@ -155,6 +185,7 @@
 		window.decrement = decrement;
 		window.verifyMatchData = verifyMatchData;
 		window.getValue = getValue;
+		window.getEvents = getEvents;
 	</script>
 	<link rel="stylesheet" href="style.css">
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
@@ -172,6 +203,13 @@
 				<input id="teamNumber" type="tel" placeholder="0" onchange="getTeam()">
 				<h3 id="teamName"><br></h3>
 			</div>
+			<div>
+				<h2 style="display: inline;">Event Name: </h2>
+				<select id="eventDropdown">
+					<option value="select-event">Select an event...</option>
+				</select>
+				<h3 id="eventName"><br></h3>
+			</div>
 		</div>
 		<div class="auto">
 			<h1>Auto</h1>
@@ -187,6 +225,10 @@
 				<input id="autoLoGoal" type="tel" placeholder="0" min="0">
 				<button class="button-3d green" onclick="increment('autoLoGoal')">+</button>
 			</div>
+			<!-- Insert checkbox here with ID taxiCheckbox -->
+			<h2>Taxi?</h2>
+			<input type="checkbox" id="taxiCheckbox" name="taxi" value="">
+			<label for="taxiCheckbox"> </label><br>
 		</div>
 		<div class="teleop">
 			<h1>Teleop</h1>

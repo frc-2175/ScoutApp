@@ -25,6 +25,30 @@ body {
 	padding-bottom: 10%;
 }
 
+select {
+	width: 25%;
+	height: 2em;
+	border: 0px;
+	border-radius: 0;
+	border-radius: 5px;
+	padding: 5px 10px;
+	transition: all 0.3s ease;
+	font-weight: bold;
+	font-size: 2em;
+	color: white;
+	box-shadow: 0 5px #57cc99;
+	background-color: #80ed99;
+	-webkit-appearance: none;
+}
+
+option {
+
+}
+
+select:hover {
+	box-shadow: 0 3px #57cc99;
+}
+
 .button-3d {
 	width: 33%;
 	height: 2em;
