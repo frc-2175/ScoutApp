@@ -89,7 +89,7 @@ select:hover {
 .sky {
 	background: #3a86ff;
 	margin-top: 1em;
-	width: 92.5%;
+	width: 87.5%;
 	box-shadow: 0 5px #4433ff;
 }
 
@@ -142,7 +142,7 @@ select:hover {
 	margin-bottom: 0.25em;
 }
 
-input {
+input[type=tel] {
 	text-align: center;
 	font-size: 2em;
 	width: 20%;
@@ -164,4 +164,63 @@ input {
 .matchInfo input {
 	height: 1.5em;
 	font-size: 1.5em;
+}
+
+.auto>div label {
+	font-size: 2em;
+}
+
+input[type=checkbox] {
+	appearance: none;
+	-webkit-appearance: none;
+	margin-left: 0px;
+}
+
+input[type=checkbox]+label {
+	user-select: none;
+}
+
+input[type=checkbox]+label::before {
+	display: inline-block;
+	transition: all 0.3s ease;
+	border-radius: 5px;
+	width: 1.4em;
+}
+
+
+input[type=checkbox]:checked+label::before {
+	content: "✔";
+	background: #80ed99;
+	box-shadow: 0 5px #57cc99;
+	margin-right: 10px;
+	margin-left: 0px;
+}
+
+input[type=checkbox]:checked+label:hover::before {
+	box-shadow: 0 3px #57cc99;
+}
+
+input[type=checkbox]:not(checked)+label::before {
+	content: "✖";
+	background: #ef233c;
+	box-shadow: 0 5px #d90429;
+	margin-right: 10px;
+	margin-left: 0px;
+	margin-left: 0px;
+}
+
+input[type=checkbox]:not(checked)+label:hover::before {
+	box-shadow: 0 3px #d90429;
+}
+
+textarea {
+	width: 87.5%;
+	font-family: 'Noto Sans';
+	font-style: normal;
+	font-size: 1em;
+	resize: none;
+	outline: none;
+	border: none;
+	border-radius: 5px;
+	box-shadow: 0 5px #999999;
 }
