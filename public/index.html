@@ -37,7 +37,7 @@
 		// Initialize Firebase
 		const app = initializeApp(firebaseConfig);
 
-		function writeMatchData(matchNumber, teamNumber, teleHiGoal, teleLoGoal, autoHiGoal, autoLoGoal, taxi, notes, event) {
+		function writeMatchData(matchNumber, teamNumber, teleHiGoal, teleLoGoal, autoHiGoal, autoLoGoal, taxi, notes, event, climb) {
 
 			const db = getDatabase();
 			set(ref(db, `${event}/teams/${teamNumber}/${matchNumber}`), {
@@ -45,7 +45,8 @@
 				teamNumber: teamNumber,
 				teleop: {
 					teleHiGoal,
-					teleLoGoal
+					teleLoGoal,
+					climb
 				},
 				auto: {
 					autoHiGoal,
@@ -147,6 +148,7 @@
 			const event = document.getElementById("eventDropdown").value;
 			const taxi = document.getElementById("taxi").checked;
 			const notes = document.getElementById("notes").value;
+			const climb = document.getElementById("climb").value
 
 			let submitError = null;
 			let verifyErrs = verifyMatchData();
@@ -160,9 +162,7 @@
 			}
 			else {
 				try {
-
-					writeMatchData(match, team, teleHi, teleLo, autoHi, autoLo, taxi, notes, event);
-
+					writeMatchData(match, team, teleHi, teleLo, autoHi, autoLo, taxi, notes, event, climb);
 				}
 				catch (e) {
 					submitError = e;
@@ -213,7 +213,7 @@
 			</div>
 			<div>
 				<h2 style="display: inline;">Event Name: </h2>
-				<select id="eventDropdown">
+				<select id="eventDropdown" class="green">
 					<option value="select-event">Select an event...</option>
 				</select>
 				<h3 id="eventName"><br></h3>
@@ -253,16 +253,27 @@
 				<button class="button-3d green" onclick="increment('teleLoGoal')">+</button>
 			</div>
 		</div>
-		<div class="Notes">
-			<h1>Notes</h1>
+		<div class="Climb">
+			<h1>Climb</h1>
 			<div>
-				<textarea name="notes" id="notes" cols="0" rows="5"></textarea>
+				<select id="climb" class="white">
+					<option value="none">None</option>
+					<option value="low">Low</option>
+					<option value="mid">Mid</option>
+					<option value="high">High</option>
+					<option value="trav">Traversal</option>
+				</select>
+			</div>
+			<div class="Notes">
+				<h1>Notes</h1>
+				<div>
+					<textarea name="notes" id="notes" cols="0" rows="5"></textarea>
+				</div>
+			</div>
+			<div>
+				<button class="button-3d sky" onclick="exportData()">Export!</button>
 			</div>
 		</div>
-		<div>
-			<button class="button-3d sky" onclick="exportData()">Export!</button>
-		</div>
-	</div>
 </body>
 
 </html>
