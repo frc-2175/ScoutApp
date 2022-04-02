@@ -41,10 +41,6 @@ select {
 	-webkit-appearance: none;
 }
 
-option {
-
-}
-
 select:hover {
 	box-shadow: 0 3px #57cc99;
 }
@@ -63,6 +59,7 @@ select:hover {
 	outline: none;
 	border-radius: 5px;
 	border: none;
+	margin: 10px;
 }
 
 .button-3d:hover {
@@ -225,4 +222,69 @@ textarea {
 	border-radius: 5px;
 	box-shadow: 0 5px #999999;
 	padding: 1%;
+}
+
+.queryInputDiv {
+	text-align: center;
+}
+
+/* Style the buttons that are used to open and close the accordion panel */
+.accordion {
+	background-color: #444;
+	color: white;
+	cursor: pointer;
+	padding: 18px;
+	width: 100%;
+	text-align: left;
+	border: none;
+	outline: none;
+	transition: all 0.3s ease-in-out;
+	border-radius: 10px 10px 10px 10px;
+	z-index: 2;
+  }
+  
+  /* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+  .active, .accordion:hover {
+	background-color: rgb(115, 115, 115);
+  }
+  
+  /* Style the accordion panel. Note: hidden by default */
+  .panel {
+	padding: 0 18px;
+	background-color: #444;
+	display: none;
+	overflow: hidden;
+	border-radius: 0px 0px 10px 10px;
+	z-index: -1;
+	position: relative;
+  }
+
+  .slideOut {
+	transition: all 0.3s ease-in-out;
+	animation-name: panelSlideOut;
+	animation-duration: 0.5s;
+  }
+
+  .slideIn {
+	transition: all 0.3s ease-in-out;
+	animation-name: panelSlideIn;
+	animation-duration: 0.5s;
+  }
+
+  @keyframes panelSlideOut {
+	from {transform: translate(0px, -30px)}
+	to {transform: translate(0px, 0px)}
+  }
+
+  @keyframes panelSlideIn {
+	from {transform: translate(0px, 0px)}
+	to {transform: translate(0px, -30px)}
+  }
+
+  p {
+	  color:white;
+  }
+  
+.material-icons {
+	font-size: 100px;
 }

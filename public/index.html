@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<!-- TODO - Fix autoLoGoal not being pushed to DB -->
 
 <head>
 	<title>ScoutApp</title>
@@ -39,7 +40,7 @@
 		function writeMatchData(matchNumber, teamNumber, teleHiGoal, teleLoGoal, autoHiGoal, autoLoGoal, taxi, notes, event) {
 
 			const db = getDatabase();
-			set(ref(db, `${event}/matches/${matchNumber}/${teamNumber}`), {
+			set(ref(db, `${event}/teams/${teamNumber}/${matchNumber}`), {
 				matchNumber: matchNumber,
 				teamNumber: teamNumber,
 				teleop: {
@@ -47,8 +48,8 @@
 					teleLoGoal
 				},
 				auto: {
-					taxi: taxi,
-					autoHiGoal: autoHiGoal,
+					autoHiGoal,
+					autoLoGoal,
 					taxi: taxi
 				},
 				notes: notes
@@ -144,7 +145,7 @@
 			const autoHi = getValue("autoHiGoal");
 			const autoLo = getValue("autoLoGoal");
 			const event = document.getElementById("eventDropdown").value;
-			const taxi = getValue("taxi");
+			const taxi = document.getElementById("taxi").checked;
 			const notes = document.getElementById("notes").value;
 
 			let submitError = null;
