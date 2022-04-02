@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>ScoutApp Data Viewer</title>
+	<link rel="stylesheet" href="../style.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+	<div class="queryInputDiv">
+		<div>
+			<h2 style="display: inline;">Event Name: </h2>
+			<select id="eventDropdown" class="green">
+				<option value="select-event">Select an event...</option>
+			</select>
+			<h3 id="eventName"></h3>
+		</div>
+		<h2 style="display: inline;">Team Number: </h2>
+		<input id="teamNumber" type="tel" placeholder="0" onchange="getTeam()">
+		<h3 id="teamName"></h3>
+		<button class="button-3d sky" onclick="queryMatches()">Query</button>
+		<hr>
+		<h1 id="averages"></h1>
+	</div>
+	<div class="matches"></div>
+	<div class="scoutButtonDiv">
+		<button class="button-3d sky green" onclick="{exportCSV()}">Export CSV</button>
+		<button class="button-3d sky green" onclick="{window.location = `../index.html`}">Scout &#10145;</button>
+	</div>
+	<a style="visibility: hidden;" id="downloadLink"></a>
+	<script>
+		const key = "Q8VmErPZQKVkOGqbT76NUCU4FhIurBBNVNhWRvRi2dAce33qRWxnCeMvFJntmFcY";
+
+		async function getTeam() {
+			const url = "https://www.thebluealliance.com/api/v3/team/frc" + document.getElementById("teamNumber").value;
+			let teamName = await fetch(url, { headers: { "X-TBA-Auth-Key": key } })
+				.then((response) => response.json())
+				.then((team) => team.nickname);
+
+			teamName = teamName === undefined ? "No team with that number :(" : teamName;
+			document.getElementById("teamName").innerText = teamName;
+		}
+
+		function createMatchAccordion(matchNumber, autoHigh, autoLow, teleHigh, teleLow, taxi, notes, climb) {
+			const matchesDiv = document.getElementsByClassName("matches")[0];
+			const accordionButton = document.createElement("button");
+			const matchDataText = document.createElement("p");
+			accordionButton.classList.add("accordion");
+			accordionButton.id = `match${matchNumber}Accordion`;
+			accordionButton.innerHTML = `Match ${matchNumber}`;
+			matchesDiv.appendChild(accordionButton);
+			const accordionPanel = document.createElement("div");
+			accordionPanel.classList.add("panel");
+			accordionPanel.id = `match${matchNumber}Panel`;
+			matchesDiv.appendChild(accordionPanel);
+			matchDataText.innerHTML = `<b>Match Data:</b> <br> Auto High: ${autoHigh} <br> Auto Low: ${autoLow} <br> Tele High: ${teleHigh} <br> Tele Low: ${teleLow} <br> Taxi: ${taxi} <br> Notes: ${notes} <br> Climb: ${climb}`;
+			accordionPanel.appendChild(matchDataText);
+			document.getElementById(`match${matchNumber}Accordion`).addEventListener("click", () => { toggleAccordion(matchNumber); });
+		}
+		function toggleAccordion(matchNumber) {
+			const accordionPanel = document.getElementById(`match${matchNumber}Panel`);
+			const accordionButton = document.getElementById(`match${matchNumber}Accordion`);
+			if (getComputedStyle(accordionPanel, null).display == "none") {
+				accordionPanel.style.display = "block";
+				accordionButton.style.borderRadius = "10px 10px 0px 0px";
+			} else {
+				accordionPanel.style.display = "none";
+				accordionButton.style.borderRadius = "10px 10px 10px 10px";
+			}
+		}
+		async function getEventFullName(shortName) {
+			if (shortName == "test") {
+				return "Test Event";
+			}
+			else {
+				const response = await fetch(`https://www.thebluealliance.com/api/v3/event/${shortName}`,
+					{
+						headers: {
+							"X-TBA-Auth-Key": key
+						}
+					}
+				);
+				return response.json().then(data => data.name);
+			}
+		}
+		function getEvents() {
+			fetch("https://scout-b39c0-default-rtdb.firebaseio.com/.json")
+				.then(response => response.json())
+				.then(json => {
+					Object.keys(json).forEach((eventKey) => {
+						getEventFullName(eventKey).then(fullName => {
+							let newOption = document.createElement("option")
+							newOption.innerHTML = fullName;
+							newOption.value = eventKey;
+							newOption.classList.add("eventOption");
+							eventDropdown.appendChild(newOption);
+						})
+					});
+				})
+		}
+		function clearMatchAccordions() {
+			Array.from(document.getElementsByClassName("accordion")).forEach((accordion) => {
+				accordion.parentNode.removeChild(accordion);
+			});
+			Array.from(document.getElementsByClassName("panel")).forEach((panel) => {
+				panel.remove();
+			});
+		}
+		async function queryMatches() {
+			clearMatchAccordions();
+			document.getElementById("averages").innerHTML = "";
+			const response = await fetch(`https://scout-b39c0-default-rtdb.firebaseio.com/${document.getElementById("eventDropdown").value}/teams/${document.getElementById("teamNumber").value}/.json`);
+			const json = await response.json();
+			const matches = await Object.keys(await json);
+			matches.forEach((match) => {
+				createMatchAccordion(match, json[match].auto.autoHiGoal, json[match].auto.autoLoGoal, json[match].teleop.teleLoGoal, json[match].teleop.teleLoGoal, json[match].auto.taxi, json[match].notes, json[match].teleop.climb);
+				console.log(json[match]);
+			});
+			const averages = await getTeamAvg(document.getElementById("teamNumber").value);
+			console.log(averages);
+			document.getElementById("averages").innerHTML = `<b>Averages:</b> <br> Auto High: ${averages.auto.hi.toFixed(2)}, Auto Low: ${averages.auto.lo.toFixed(2)}, Tele High: ${averages.tele.hi.toFixed(2)}, Tele Low: ${averages.tele.lo.toFixed(2)}, Taxi: ${averages.auto.taxi.toFixed(2)}`;
+		}
+		document.body.addEventListener("load", getEvents());
+
+		async function getTeams() {
+			const raw = await (await fetch("https://scout-b39c0-default-rtdb.firebaseio.com/.json")).json();
+			const data = await raw[document.getElementById("eventDropdown").value];
+			return Object.keys(data.teams);
+		}
+
+		async function getMatches(teamNumber) {
+			const raw = await (await fetch("https://scout-b39c0-default-rtdb.firebaseio.com/.json")).json();
+			const data = await raw[document.getElementById("eventDropdown").value];
+			return await Object.values(await data.teams[teamNumber]);
+		}
+
+		async function getTeamAvg(teamNumber) {
+			const teamStats = {
+				auto: {
+					hi: 0,
+					lo: 0,
+					taxi: 0,
+				},
+				tele: {
+					hi: 0,
+					lo: 0,
+				},
+				totalMatches: 0,
+			};
+
+			for (const match of await getMatches(teamNumber)) {
+				teamStats.auto.hi += match.auto.autoHiGoal;
+				teamStats.auto.lo += match.auto.autoLoGoal;
+				teamStats.tele.hi += match.teleop.teleHiGoal;
+				teamStats.tele.lo += match.teleop.teleLoGoal;
+				teamStats.auto.taxi += match.auto.taxi;
+				teamStats.totalMatches++;
+			}
+
+			teamStats.auto.hi /= teamStats.totalMatches;
+			teamStats.auto.lo /= teamStats.totalMatches;
+			teamStats.tele.hi /= teamStats.totalMatches;
+			teamStats.tele.lo /= teamStats.totalMatches;
+			teamStats.auto.taxi /= teamStats.totalMatches;
+
+			return teamStats;
+		}
+
+		async function teamCSV(teamNumber) {
+			const raw = await (await fetch("https://scout-b39c0-default-rtdb.firebaseio.com/.json")).json();
+			const data = await raw[document.getElementById("eventDropdown").value];
+			const csv = ["Match #,Auto High,Auto Low,Teleop High,Teleop Low,Taxi,Climb"];
+			for (const match of await getMatches(teamNumber)) {
+				const row = [];
+				row.push(match.matchNumber);
+				row.push(match.auto.autoHiGoal);
+				row.push(match.auto.autoLoGoal);
+				row.push(match.teleop.teleHiGoal);
+				row.push(match.teleop.teleLoGoal);
+				row.push(match.auto.taxi);
+				row.push(match.teleop.climb)
+
+				row.join();
+				csv.push(row);
+			}
+
+			return csv.join("\n");
+		}
+
+		async function exportCSV() {
+			var programBlob = new Blob([await teamCSV(document.getElementById("teamNumber").value)], { type: 'text/plain' });
+			document.getElementById("downloadLink").href = await window.URL.createObjectURL(programBlob);
+			document.getElementById("downloadLink").download = `${document.getElementById("eventDropdown").value}Team${document.getElementById("teamNumber").value}.csv`;
+			document.getElementById("downloadLink").click();
+		}
+	</script>
+</body>
+
+</html>
