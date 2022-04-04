@@ -160,13 +160,9 @@ function exportData() {
 		teleopFields.map((name) => [name, getValue(name)]),
 	);
 
-	console.log(teleop);
-
 	const auto = Object.fromEntries(
 		autoFields.map((name) => [name, getValue(name)]),
 	);
-
-	console.log(auto);
 
 	const match = getValue("matchNumber");
 	const team = getValue("teamNumber");
@@ -184,7 +180,7 @@ function exportData() {
 		});
 	} else {
 		try {
-			// writeMatchData(match, team, teleop, auto, notes, event);
+			writeMatchData(match, team, teleop, auto, notes, event);
 		} catch (e) {
 			submitError = e;
 			console.error(e);
@@ -206,6 +202,28 @@ function exportData() {
 		}
 	}
 }
+
+
+function disableTouchScroll() {
+	const canvasDom = document.getElementById("defaultCanvas0");
+	canvasDom.addEventListener("touchstart", (event) => { event.preventDefault(); });
+	canvasDom.addEventListener("touchmove", (event) => { event.preventDefault(); });
+	canvasDom.addEventListener("touchend", (event) => { event.preventDefault(); });
+	canvasDom.addEventListener("touchcancel", (event) => { event.preventDefault(); });
+}
+
+function dataURLtoBlob(dataurl) {
+	const arr = dataurl.split(",");
+	const mime = arr[0].match(/:(.*?);/)[1];
+	const bstr = atob(arr[1]);
+	let n = bstr.length;
+	const u8arr = new Uint8Array(n);
+	while (n--) {
+		u8arr[n] = bstr.charCodeAt(n);
+	}
+	return new Blob([u8arr], { type: mime });
+}
+
 window.getTeam = getTeam;
 window.exportData = exportData;
 window.increment = increment;
@@ -213,3 +231,5 @@ window.decrement = decrement;
 window.verifyMatchData = verifyMatchData;
 window.getValue = getValue;
 window.getEvents = getEvents;
+window.disableTouchScroll = disableTouchScroll;
+window.dataURLtoBlob = dataURLtoBlob;
