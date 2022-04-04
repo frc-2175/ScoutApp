@@ -1,5 +1,7 @@
 module.exports = {
-	extends: "eslint:recommended",
+	extends: [
+		"eslint:recommended",
+	],
 	env: {
 		browser: true,
 		commonjs: true,
@@ -23,11 +25,11 @@ module.exports = {
 		yoda: "error",
 		"quote-props": [
 			"error",
-			"as-needed"
+			"as-needed",
 		],
 		eqeqeq: [
 			"error",
-			"smart"
-		]
+			"smart",
+		],
 	},
 };
