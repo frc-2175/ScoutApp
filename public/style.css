@@ -307,3 +307,9 @@ input[type=text] {
 	text-align: center;
 	width: 34%;
 }
+
+#autoPathParent {
+	display: flex;
+	justify-content: center;
+	padding: 2px;
+}
