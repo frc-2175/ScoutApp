@@ -5,7 +5,8 @@
 		"firebase": "^9.6.10",
 		"googleapis": "^95.0.0",
 		"p5": "^1.4.1",
-		"promisify": "^0.0.3"
+		"promisify": "^0.0.3",
+		"toastify-js": "^1.11.2"
 	},
 	"scripts": {
 		"build": "rollup -c rollup.config.js"

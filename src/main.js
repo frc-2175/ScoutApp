@@ -44,13 +44,26 @@ const teleopFields = [
 	"success",
 ];
 
+function getResizedCanvas(canvas,newWidth,newHeight) {
+    var tmpCanvas = document.createElement('canvas');
+    tmpCanvas.width = newWidth;
+    tmpCanvas.height = newHeight;
+
+    var ctx = tmpCanvas.getContext('2d');
+    ctx.drawImage(canvas,0,0,canvas.width,canvas.height,0,0,newWidth,newHeight);
+
+    return tmpCanvas;
+}
 
 function uploadCanvasToFirebase(matchNumber, teamNumber, event) {
 	const storage = getStorage();
-	const drawingRef = storageRef(storage, `${event}-${teamNumber}-${matchNumber}.png`);
-	uploadBytes(drawingRef, dataURLtoBlob(document.getElementById("defaultCanvas0").toDataURL())).then((snapshot) => {
-		console.log(snapshot);
-	});
+	const drawingRef = storageRef(storage, `${event}-${teamNumber}-${matchNumber}.webp`);
+	const canvas = getResizedCanvas(document.getElementById("defaultCanvas0"), 638, 357)
+	canvas.toBlob((blob) => {
+		uploadBytes(drawingRef, blob).then((snapshot) => {
+			console.log(snapshot);
+		});
+	}, "image/webp", 0.5);
 }
 
 function writeMatchData(matchNumber, teamNumber, teleop, auto, notes, event) {
@@ -192,10 +205,8 @@ function exportData() {
 	let submitError = null;
 	const verifyErrs = verifyMatchData();
 
-	let toast = new Toasty();
-
 	if (verifyErrs.length > 0) {
-			toast.error(`Error(s) in data, check team and match number and try again. (${JSON.stringify(verifyErrs)})`)
+			new Toast({   message: `Error(s) in data, check team and match number and try again. (${JSON.stringify(verifyErrs)})`,   type: 'danger' });
 	} else {
 		try {
 			writeMatchData(match, team, teleop, auto, notes, event);
@@ -204,9 +215,9 @@ function exportData() {
 			console.error(e);
 		} finally {
 			if (submitError !== null) {
-				toast.error(`Error posting data to DB: "${submitError}"`);
+				new Toast({ message: `Error posting data to DB: "${submitError}"`, type: 'danger' });
 			} else {
-				toast.success("Success! Data submitted to DB.");
+				new Toast({ message: `Success! Data submitted to DB.`, type: 'success' })
 				clearFields();
 			}
 		}
@@ -220,18 +231,6 @@ function disableTouchScroll() {
 	canvasDom.addEventListener("touchmove", (event) => { event.preventDefault(); });
 	canvasDom.addEventListener("touchend", (event) => { event.preventDefault(); });
 	canvasDom.addEventListener("touchcancel", (event) => { event.preventDefault(); });
-}
-
-function dataURLtoBlob(dataurl) {
-	const arr = dataurl.split(",");
-	const mime = arr[0].match(/:(.*?);/)[1];
-	const bstr = atob(arr[1]);
-	let n = bstr.length;
-	const u8arr = new Uint8Array(n);
-	while (n--) {
-		u8arr[n] = bstr.charCodeAt(n);
-	}
-	return new Blob([u8arr], { type: mime });
 }
 
 window.getTeam = getTeam;
