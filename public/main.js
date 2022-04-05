@@ -3,6 +3,9 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
 import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-database.js";
+import { getStorage, uploadBytes } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-storage.js';
+import { ref as storageRef } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-storage.js';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -41,6 +44,15 @@ const teleopFields = [
 	"success",
 ];
 
+
+function uploadCanvasToFirebase(matchNumber, teamNumber, event) {
+	const storage = getStorage();
+	const drawingRef = storageRef(storage, `${event}-${teamNumber}-${matchNumber}.png`);
+	uploadBytes(drawingRef, dataURLtoBlob(document.getElementById("defaultCanvas0").toDataURL())).then((snapshot) => {
+		console.log(snapshot);
+	});
+}
+
 function writeMatchData(matchNumber, teamNumber, teleop, auto, notes, event) {
 	const db = getDatabase();
 	set(ref(db, `${event}/teams/${teamNumber}/${matchNumber}`), {
@@ -50,7 +62,13 @@ function writeMatchData(matchNumber, teamNumber, teleop, auto, notes, event) {
 		auto,
 		notes,
 	});
+	uploadCanvasToFirebase(matchNumber, teamNumber, event);
 }
+
+window.addEventListener('beforeinstallprompt', (e) => {
+	alert("Hey, it looks like you haven't installed this app as a PWA. For a much better experience, make sure to install it.")
+	e.preventDefault();
+});
 
 /* eslint-disable no-unused-vars */
 const key = "Q8VmErPZQKVkOGqbT76NUCU4FhIurBBNVNhWRvRi2dAce33qRWxnCeMvFJntmFcY";
@@ -77,7 +95,7 @@ function setValue(id, value) {
 }
 
 function increment(id) {
-	setValue(id, getValue(id) + 1);
+	setValue(id, Number(getValue(id)) + 1);
 }
 
 function decrement(id) {
@@ -95,6 +113,7 @@ function clearFields() {
 	for (const id of idList) {
 		setValue(id, "");
 	}
+	setTimeout(() => {setup();}, 400);
 }
 
 function verifyMatchData() {
@@ -168,6 +187,7 @@ function exportData() {
 	const team = getValue("teamNumber");
 	const event = document.getElementById("eventDropdown").value;
 	const notes = document.getElementById("notes").value;
+	auto["pathURL"] = `https://firebasestorage.googleapis.com/v0/b/scout-b39c0.appspot.com/o/${event}-${team}-${match}.png?alt=media`
 
 	let submitError = null;
 	const verifyErrs = verifyMatchData();
@@ -233,3 +253,4 @@ window.getValue = getValue;
 window.getEvents = getEvents;
 window.disableTouchScroll = disableTouchScroll;
 window.dataURLtoBlob = dataURLtoBlob;
+window.uploadCanvasToFirebase = uploadCanvasToFirebase;

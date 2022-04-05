@@ -170,16 +170,27 @@
 		async function teamCSV(teamNumber) {
 			const raw = await (await fetch("https://scout-b39c0-default-rtdb.firebaseio.com/.json")).json();
 			const data = await raw[document.getElementById("eventDropdown").value];
-			const csv = ["Match #,Auto High,Auto Low,Teleop High,Teleop Low,Taxi,Climb"];
+			const csv = ["Match #,Auto High,Auto Low,Auto Missed,Auto Picked,Auto Path Image (URL),Teleop High,Teleop Low,Teleop Missed,Teleop Defended,Teleop Defended Against,Teleop Malfunction,Taxi,Climb,Climb Success,Climb Start,Climb End,Notes"];
 			for (const match of await getMatches(teamNumber)) {
 				const row = [];
 				row.push(match.matchNumber);
 				row.push(match.auto.autoHiGoal);
 				row.push(match.auto.autoLoGoal);
+				row.push(match.auto.autoMissed);
+				row.push(match.auto.autoPicked);
+				row.push(match.auto.pathURL);
 				row.push(match.teleop.teleHiGoal);
 				row.push(match.teleop.teleLoGoal);
+				row.push(match.teleop.teleMissed);
+				row.push(match.teleop.defense);
+				row.push(match.teleop.defended);
+				row.push(match.teleop.malfunc);
 				row.push(match.auto.taxi);
 				row.push(match.teleop.climb)
+				row.push(match.teleop.climbSuccess);
+				row.push(match.teleop.climbStart);
+				row.push(match.teleop.climbEnd);
+				row.push(match.teleop.notes);
 
 				row.join();
 				csv.push(row);

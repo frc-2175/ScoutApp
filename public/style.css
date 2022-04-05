@@ -311,5 +311,5 @@ input[type=text] {
 #autoPathParent {
 	display: flex;
 	justify-content: center;
-	padding: 2px;
+	padding: 0px;
 }
