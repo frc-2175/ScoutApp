@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-app.js";
-import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/9.6.7/firebase-database.js";
-import { getStorage, uploadBytes } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-storage.js';
-import { ref as storageRef } from 'https://www.gstatic.com/firebasejs/9.6.7/firebase-storage.js';
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, set } from "firebase/database";
+import { getStorage, uploadBytes } from 'firebase/storage';
+import { ref as storageRef } from 'firebase/storage';
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -192,12 +192,10 @@ function exportData() {
 	let submitError = null;
 	const verifyErrs = verifyMatchData();
 
+	let toast = new Toasty();
+
 	if (verifyErrs.length > 0) {
-		toasting.create({
-			title: "Error!",
-			text: `Error(s) in data, check team and match number and try again. (${JSON.stringify(verifyErrs)})`,
-			timeout: 5000,
-		});
+			toast.error(`Error(s) in data, check team and match number and try again. (${JSON.stringify(verifyErrs)})`)
 	} else {
 		try {
 			writeMatchData(match, team, teleop, auto, notes, event);
@@ -206,17 +204,9 @@ function exportData() {
 			console.error(e);
 		} finally {
 			if (submitError !== null) {
-				toasting.create({
-					title: "Error!",
-					text: `Error posting data to DB: "${submitError}"`,
-					timeout: 5000,
-				});
+				toast.error(`Error posting data to DB: "${submitError}"`);
 			} else {
-				toasting.create({
-					title: "Success!",
-					text: "Posted data to DB successfully.",
-					timeout: 5000,
-				});
+				toast.success("Success! Data submitted to DB.");
 				clearFields();
 			}
 		}

@@ -13,6 +13,7 @@ function setup() {
 
 function windowResized() {
 	resizeCanvas(windowWidth * 0.95, windowWidth * 0.95 * 0.56);
+	background(img);
 }
 
 function touchStarted() {
