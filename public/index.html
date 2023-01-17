@@ -17,7 +17,7 @@
 	<meta name="mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 	<meta name="apple-mobile-web-app-title" />
-	<link rel="stylesheet" href="style.css" />
+	<link id="mainStyle" rel="stylesheet" href="style.css" />
 	<link rel="stylesheet" href="toast.css" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 </head>
@@ -26,6 +26,12 @@
 	<div class="wrapper">
 		<div class="matchInfo">
 			<div>
+				<h2 style="display: inline;">Event Name: </h2>
+				<select id="eventDropdown" class="green">
+					<option value="select-event">Select an event...</option>
+				</select>
+			</div>
+			<div>
 				<h2 style="display: inline;">Match Number: </h2>
 				<input id="matchNumber" type="tel" placeholder="0">
 			</div>
@@ -33,12 +39,6 @@
 				<h2 style="display: inline;">Team Number: </h2>
 				<input id="teamNumber" type="tel" placeholder="0" onchange="getTeam()">
 				<h3 id="teamName"></h3>
-			</div>
-			<div>
-				<h2 style="display: inline;">Event Name: </h2>
-				<select id="eventDropdown" class="green">
-					<option value="select-event">Select an event...</option>
-				</select>
 			</div>
 		</div>
 		<hr width="100%">
@@ -49,19 +49,19 @@
 				<label for="taxi">Taxi?</label>
 			</div>
 			<div>
-				<h3>High Goal</h3>
+				<h3>Top Row</h3>
 				<button class="button-3d red" onclick="decrement('autoHiGoal')">-</button>
 				<input id="autoHiGoal" type="tel" placeholder="0" min="0">
 				<button class="button-3d green" onclick="increment('autoHiGoal')">+</button>
 			</div>
 			<div>
-				<h3>Low Goal</h3>
+				<h3>Middle Row</h3>
 				<button class="button-3d red" onclick="decrement('autoLoGoal')">-</button>
 				<input id="autoLoGoal" type="tel" placeholder="0" min="0">
 				<button class="button-3d green" onclick="increment('autoLoGoal')">+</button>
 			</div>
 			<div>
-				<h3>Missed</h3>
+				<h3>Bottom Row</h3>
 				<button class="button-3d red" onclick="decrement('autoMissed')">-</button>
 				<input id="autoMissed" type="tel" placeholder="0" min="0">
 				<button class="button-3d green" onclick="increment('autoMissed')">+</button>
@@ -72,6 +72,13 @@
 				<input id="autoPicked" type="tel" placeholder="0" min="0">
 				<button class="button-3d green" onclick="increment('autoPicked')">+</button>
 			</div>
+			<h3>Charge Station</h3>
+			<select id="Chargedropdown" class="green">
+				<option value="select-event">Select an option...</option>
+				<option value="select-event">Docked and Engaged</option>
+				<option value="select-event">Docked</option>
+				<option value="select-event">Didn't attempt</option>
+			</select>
 			<h3>Auto Path</h3>
 			<h4>Trace the path that the robot takes during auto. (Draw nothing if no auto)</h4>
 			<div id="autoPathParent">
@@ -83,19 +90,19 @@
 		<div class="teleop">
 			<h1>Teleop</h1>
 			<div>
-				<h3>High Goal</h3>
+				<h3>Top Row</h3>
 				<button class="button-3d red" onclick="decrement('teleHiGoal')">-</button>
 				<input id="teleHiGoal" type="tel" placeholder="0" min="0">
 				<button class="button-3d green" onclick="increment('teleHiGoal')">+</button>
 			</div>
 			<div>
-				<h3>Low Goal</h3>
+				<h3>Middle Row</h3>
 				<button class="button-3d red" onclick="decrement('teleLoGoal')">-</button>
 				<input id="teleLoGoal" type="tel" placeholder="0" min="0">
 				<button class="button-3d green" onclick="increment('teleLoGoal')">+</button>
 			</div>
 			<div>
-				<h3>Missed</h3>
+				<h3>Bottom Row</h3>
 				<button class="button-3d red" onclick="decrement('teleMissed')">-</button>
 				<input id="teleMissed" type="tel" placeholder="0" min="0">
 				<button class="button-3d green" onclick="increment('teleMissed')">+</button>
@@ -108,35 +115,18 @@
 				<input type="checkbox" id="defense">
 				<label for="defense">Played defense?</label>
 			</div>
-			<div>
-				<input type="checkbox" id="defended">
-				<label for="defended">Defended against?</label>
-			</div>
 		</div>
 		<hr width="100%">
 		<div class="Climb">
-			<h1>Climb</h1>
-			<div>
-				<select id="climb" class="white">
-					<option value=0>None</option>
-					<option value=4>Low</option>
-					<option value=6>Mid</option>
-					<option value=10>High</option>
-					<option value=15>Traversal</option>
-				</select>
-			</div>
-			<div>
-				<input type="checkbox" id="success">
-				<label for="success">Succeeded?</label>
-			</div>
-			<div>
-				<h2 style="display: inline;">Start: </h2>
-				<input class="white" id="climbStart" type="text" placeholder="2:00">
-			</div>
-			<div>
-				<h2 style="display: inline;">End: </h2>
-				<input class="white" id="climbEnd" type="text" placeholder="2:30">
-			</div>
+			<h1>Endgame</h1>
+			<h3>Charge Station</h3>
+			<select id="Chargedengame" class="green">
+				<option value="select-event">Select an option...</option>
+				<option value="select-event">Docked and Engaged</option>
+				<option value="select-event">Docked</option>
+				<option value="select-event">Parked</option>
+				<option value="select-event">None of the Above</option>
+			</select>
 		</div>
 		<hr width="100%">
 		<div class="Notes">
@@ -151,6 +141,10 @@
 		</div>
 		<div>
 			<button class="button-3d green wide" onclick="{window.location = `viewer`}">View Data &#10145;</button>
+		</div>
+		<div>
+			<button class="button-3d green"
+				onclick="{document.getElementById(`mainStyle`).href = `stylecharged.css`}">Switch Themes</button>
 		</div>
 	</div>
 </body>
