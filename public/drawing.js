@@ -12,7 +12,12 @@ function setup() {
 }
 
 function reset() {
-	
+	const parentElement = document.getElementById("autoPathParent");
+	parentElement.removeChild(parentElement.children[0]);
+	let autoPathElement = document.createElement("div");
+	autoPathElement.id = "autoPath";
+	parentElement.appendChild(autoPathElement);
+	setup();
 }
 
 function windowResized() {
