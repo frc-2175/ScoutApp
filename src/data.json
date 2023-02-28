@@ -1,0 +1,21 @@
+{
+    "event": "North Star",
+    "auto: taxi": false,
+    "auto: high goal cone": 0,
+    "auto: high goal cube": 0,
+    "auto: mid goal cone": 0,
+    "auto: mid goal cube": 0,
+    "auto: low goal cone": 0,
+    "auto: low goal cube": 0,
+    "auto: game pieces picked up": 0,
+    "auto: charge station status": 1, //1-3, with 1 being docked and engaged, 2 being docked, 3 being not docked
+    "tele: taxi": false,
+    "tele: high goal cone": 0,
+    "tele: high goal cube": 0,
+    "tele: mid goal cone": 0,
+    "tele: mid goal cube": 0,
+    "tele: low goal cone": 0,
+    "tele: low goal cube": 0,
+    "tele: game pieces picked up": 0,
+    "tele: charge station status": 1, //1-3, with 1 being docked and engaged, 2 being docked, 3 being not docked
+}
