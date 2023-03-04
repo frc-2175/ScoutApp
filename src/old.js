@@ -181,7 +181,7 @@ async function getTeam() {
 }
 
 async function getEvents() {
-	const url = `https://www.thebluealliance.com/api/v3/team/frc${getValue("teamNumber")}/events/simple`;
+	const url = `https://www.thebluealliance.com/api/v3/team/frc${getValue("team-number")}/events/simple`;
 	const currentEvents = await (await fetch(url, { headers: { "X-TBA-Auth-Key": key } })).json();
 
 	return [...currentEvents.slice(-3), { name: "Test Event", key: "test" }];

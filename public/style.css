@@ -14,7 +14,7 @@ body {
 }
 
 select {
-	max-width: 400px;
+	max-width: 85vw;
 	height: 2em;
 	border: 0px;
 	border-radius: 0;
@@ -26,6 +26,7 @@ select {
 	-webkit-appearance: none;
 	margin-top: 0.5em;
 	margin-bottom: 0.5em;
+	text-overflow: ellipsis;
 }
 
 .button-3d {
@@ -312,4 +313,136 @@ input[type=text] {
 	display: flex;
 	justify-content: center;
 	padding: 0px;
+}
+
+#alertDiv {
+	position: fixed;
+	top: 10px;
+	background-color: red;
+	color: black;
+	max-width: 95vw;
+	z-index: 100;
+	border-radius: 15px;
+	border: white solid 3px;
+	box-shadow: 5px 5px black 10px 10px;
+	padding: 10px;
+	visibility: hidden;
+	transform: translateX(-100%);
+	-webkit-transform: translateX(-100%);
+}
+
+.slide-in {
+	animation: slide-in 0.5s forwards;
+	-webkit-animation: slide-in 0.5s forwards;
+}
+
+.slide-out {
+	animation: slide-out 0.5s forwards;
+	-webkit-animation: slide-out 0.5s forwards;
+}
+
+@keyframes slide-in {
+	100% {
+		transform: translateX(0%);
+	}
+}
+
+@-webkit-keyframes slide-in {
+	100% {
+		-webkit-transform: translateX(0%);
+	}
+}
+
+@keyframes slide-out {
+	0% {
+		transform: translateX(0%);
+	}
+
+	100% {
+		transform: translateX(-100%);
+	}
+}
+
+@-webkit-keyframes slide-out {
+	0% {
+		-webkit-transform: translateX(0%);
+	}
+
+	100% {
+		-webkit-transform: translateX(-100%);
+	}
+}
+
+.fade-in {
+	animation: fade-in 0.5s forwards;
+	-webkit-animation: fade-in 0.5s forwards;
+}
+
+.fade-out {
+	animation: fade-out 0.5s forwards;
+	-webkit-animation: fade-out 0.5s forwards;
+}
+
+@keyframes fade-in {
+	0% {
+		opacity: "20%";
+	}
+
+	100% {
+		opacity: "100%";
+	}
+}
+
+@-webkit-keyframes fade-in {
+	0% {
+		opacity: "20%";
+	}
+
+	100% {
+		opacity: "100%";
+	}
+}
+
+@keyframes fade-out {
+	0% {
+		opacity: "100%";
+	}
+
+	100% {
+		opacity: "20%";
+	}
+}
+
+@-webkit-keyframes fade-out {
+	0% {
+		opacity: "100%";
+	}
+
+	100% {
+		opacity: "20%";
+	}
+}
+
+.modalText {
+	color: black;
+}
+
+#iosPwaModal {
+	width: 90vw;
+	height: fit-content;
+	background-color: white;
+	color: black;
+	text-align: center;
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	margin: auto;
+	max-width: 100%;
+	overflow: auto;
+	z-index: 102;
+	border-radius: 15px;
+	visibility: hidden;
+	padding: 10px;
 }

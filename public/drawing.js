@@ -1,5 +1,13 @@
+function disableTouchScroll() {
+	const canvasDom = document.getElementById("defaultCanvas0");
+	canvasDom.addEventListener("touchstart", (event) => { event.preventDefault(); });
+	canvasDom.addEventListener("touchmove", (event) => { event.preventDefault(); });
+	canvasDom.addEventListener("touchend", (event) => { event.preventDefault(); });
+	canvasDom.addEventListener("touchcancel", (event) => { event.preventDefault(); });
+}
+
 function preload() {
-	img = loadImage("https://firebasestorage.googleapis.com/v0/b/scout-b39c0.appspot.com/o/2022LayoutMarkingDiagram.png?alt=media&token=71790961-c071-48ea-9a80-e9cc11cb1aa0");
+	img = loadImage("https://firebasestorage.googleapis.com/v0/b/scout-b39c0.appspot.com/o/2023-field-color-reduced.png?alt=media&token=8a177faf-bb7b-4382-86b9-e61e5be0dc34");
 }
 
 function setup() {

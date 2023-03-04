@@ -5,10 +5,10 @@
 <head>
 	<title>ScoutApp</title>
 	<meta name="theme-color" content=hsl(0, 0%, 15%) />
-	<script src="toast.js"></script>
-	<script src="bundle.min.js"></script>
+	<!-- <script src="bundle.min.js"></script> -->
 	<script src="drawing.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.1/p5.min.js"></script>
+	<script src="main.js"></script>
 	<link rel="apple-touch-icon" href="apple-touch-icon.png">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 	<meta name="mobile-web-app-capable" content="yes" />
@@ -17,67 +17,100 @@
 	<meta name="mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 	<meta name="apple-mobile-web-app-title" />
-	<link id="mainStyle" rel="stylesheet" href="style.css" />
-	<link rel="stylesheet" href="toast.css" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<link id="mainStyle" rel="stylesheet" href="style.css" />
 </head>
 
 <body>
+	<div id="alertDiv">
+		<b>
+			<p id="alertText"></p>
+		</b>
+	</div>
+	<div id="iosPwaModal">
+		<h1>Install as a PWA</h1>
+		<p class="modalText">Without installing this app, you may encounter unsuported features, instability and bugs.
+			It is highly recomended that you install this app.</p>
+		<p class="modalText"><b>To install this app:</b> press the "share" icon below and find "add to home screen" in
+			the
+			sharing
+			options. Press "add", and close this window. Open the app from the home screen.</p>
+		<p class="modalText">You may also choose to ignore this warning, and continue using this app in the browser.</p>
+		<button class="button-3d red" onclick="ignorePWAModal()">Ignore</button>
+	</div>
 	<div class="wrapper">
 		<div class="matchInfo">
 			<div>
 				<h2 style="display: inline;">Event Name: </h2>
-				<select id="eventDropdown" class="green">
+				<select id="event-id" class="green">
 					<option value="select-event">Select an event...</option>
 				</select>
 			</div>
 			<div>
-				<h2 style="display: inline;">Match Number: </h2>
-				<input id="matchNumber" type="tel" placeholder="0">
+				<h2 style="display: inline;">Team Number: </h2>
+				<input id="team-number" type="tel" placeholder="0" value="0" onchange="getTeam()" autocomplete="off">
+				<h3 id="team-name">Enter a team number to select event</h3>
 			</div>
 			<div>
-				<h2 style="display: inline;">Team Number: </h2>
-				<input id="teamNumber" type="tel" placeholder="0" onchange="getTeam()">
-				<h3 id="teamName"></h3>
+				<h2 style="display: inline;">Match Number: </h2>
+				<input id="match-number" type="tel" placeholder="0" value="0" autocomplete="off">
 			</div>
 		</div>
 		<hr width="100%">
 		<div class="auto">
 			<h1>Auto</h1>
 			<div class="taxi">
-				<input type="checkbox" id="taxi">
-				<label for="taxi">Taxi?</label>
+				<input type="checkbox" id="auto-taxi">
+				<label for="auto-taxi">Taxi?</label>
 			</div>
 			<div>
-				<h3>Top Row</h3>
-				<button class="button-3d red" onclick="decrement('autoHiGoal')">-</button>
-				<input id="autoHiGoal" type="tel" placeholder="0" min="0">
-				<button class="button-3d green" onclick="increment('autoHiGoal')">+</button>
+				<h3>High Row Cone</h3>
+				<button class="button-3d red" onclick="decrement('auto-high-cone')">-</button>
+				<input id="auto-high-cone" type="tel" placeholder="0" value="0" min="0" autocomplete="off">
+				<button class="button-3d green" onclick="increment('auto-high-cone')">+</button>
 			</div>
 			<div>
-				<h3>Middle Row</h3>
-				<button class="button-3d red" onclick="decrement('autoLoGoal')">-</button>
-				<input id="autoLoGoal" type="tel" placeholder="0" min="0">
-				<button class="button-3d green" onclick="increment('autoLoGoal')">+</button>
+				<h3>High Row Cube</h3>
+				<button class="button-3d red" onclick="decrement('auto-high-cube')">-</button>
+				<input id="auto-high-cube" type="tel" placeholder="0" value="0" min="0" autocomplete="off">
+				<button class="button-3d green" onclick="increment('auto-high-cube')">+</button>
 			</div>
 			<div>
-				<h3>Bottom Row</h3>
-				<button class="button-3d red" onclick="decrement('autoMissed')">-</button>
-				<input id="autoMissed" type="tel" placeholder="0" min="0">
-				<button class="button-3d green" onclick="increment('autoMissed')">+</button>
+				<h3>Middle Row Cone</h3>
+				<button class="button-3d red" onclick="decrement('auto-mid-cone')">-</button>
+				<input id="auto-mid-cone" type="tel" placeholder="0" value="0" min="0" autocomplete="off">
+				<button class="button-3d green" onclick="increment('auto-mid-cone')">+</button>
+			</div>
+			<div>
+				<h3>Middle Row Cube</h3>
+				<button class="button-3d red" onclick="decrement('auto-mid-cube')">-</button>
+				<input id="auto-mid-cube" type="tel" placeholder="0" value="0" min="0" autocomplete="off">
+				<button class="button-3d green" onclick="increment('auto-mid-cube')">+</button>
+			</div>
+			<div>
+				<h3>Low Row Cone</h3>
+				<button class="button-3d red" onclick="decrement('auto-low-cone')">-</button>
+				<input id="auto-low-cone" type="tel" placeholder="0" value="0" min="0" autocomplete="off">
+				<button class="button-3d green" onclick="increment('auto-low-cone')">+</button>
+			</div>
+			<div>
+				<h3>Low Row Cube</h3>
+				<button class="button-3d red" onclick="decrement('auto-low-cube')">-</button>
+				<input id="auto-low-cube" type="tel" placeholder="0" value="0" min="0" autocomplete="off">
+				<button class="button-3d green" onclick="increment('auto-low-cube')">+</button>
 			</div>
 			<div>
 				<h3>Picked Up</h3>
-				<button class="button-3d red" onclick="decrement('autoPicked')">-</button>
-				<input id="autoPicked" type="tel" placeholder="0" min="0">
-				<button class="button-3d green" onclick="increment('autoPicked')">+</button>
+				<button class="button-3d red" onclick="decrement('auto-picked')">-</button>
+				<input id="auto-picked" type="tel" placeholder="0" value="0" min="0" autocomplete="off">
+				<button class="button-3d green" onclick="increment('auto-picked')">+</button>
 			</div>
 			<h3>Charge Station</h3>
-			<select id="Chargedropdown" class="green">
-				<option value="select-event">Select an option...</option>
-				<option value="select-event">Docked and Engaged</option>
-				<option value="select-event">Docked</option>
-				<option value="select-event">Didn't attempt</option>
+			<select id="auto-charge-station" class="green">
+				<option value="select-status">Select an option...</option>
+				<option value="docked-engaged">Docked and Engaged</option>
+				<option value="docked">Docked</option>
+				<option value="none">None of the Above</option>
 			</select>
 			<h3>Auto Path</h3>
 			<h4>Trace the path that the robot takes during auto. (Draw nothing if no auto)</h4>
@@ -90,42 +123,58 @@
 		<div class="teleop">
 			<h1>Teleop</h1>
 			<div>
-				<h3>Top Row</h3>
-				<button class="button-3d red" onclick="decrement('teleHiGoal')">-</button>
-				<input id="teleHiGoal" type="tel" placeholder="0" min="0">
-				<button class="button-3d green" onclick="increment('teleHiGoal')">+</button>
+				<h3>High Row Cone</h3>
+				<button class="button-3d red" onclick="decrement('teleop-high-cone')">-</button>
+				<input id="teleop-high-cone" type="tel" placeholder="0" value="0" min="0" autocomplete="off">
+				<button class="button-3d green" onclick="increment('teleop-high-cone')">+</button>
 			</div>
 			<div>
-				<h3>Middle Row</h3>
-				<button class="button-3d red" onclick="decrement('teleLoGoal')">-</button>
-				<input id="teleLoGoal" type="tel" placeholder="0" min="0">
-				<button class="button-3d green" onclick="increment('teleLoGoal')">+</button>
+				<h3>High Row Cube</h3>
+				<button class="button-3d red" onclick="decrement('teleop-high-cube')">-</button>
+				<input id="teleop-high-cube" type="tel" placeholder="0" value="0" min="0" autocomplete="off">
+				<button class="button-3d green" onclick="increment('teleop-high-cube')">+</button>
 			</div>
 			<div>
-				<h3>Bottom Row</h3>
-				<button class="button-3d red" onclick="decrement('teleMissed')">-</button>
-				<input id="teleMissed" type="tel" placeholder="0" min="0">
-				<button class="button-3d green" onclick="increment('teleMissed')">+</button>
+				<h3>Middle Row Cone</h3>
+				<button class="button-3d red" onclick="decrement('teleop-mid-cone')">-</button>
+				<input id="teleop-mid-cone" type="tel" placeholder="0" value="0" min="0" autocomplete="off">
+				<button class="button-3d green" onclick="increment('teleop-mid-cone')">+</button>
 			</div>
 			<div>
-				<input type="checkbox" id="malfunc">
-				<label for="malfunc">Malfunctioned?</label>
+				<h3>Middle Row Cube</h3>
+				<button class="button-3d red" onclick="decrement('teleop-mid-cube')">-</button>
+				<input id="teleop-mid-cube" type="tel" placeholder="0" value="0" min="0" autocomplete="off">
+				<button class="button-3d green" onclick="increment('teleop-mid-cube')">+</button>
 			</div>
 			<div>
-				<input type="checkbox" id="defense">
-				<label for="defense">Played defense?</label>
+				<h3>Low Row Cone</h3>
+				<button class="button-3d red" onclick="decrement('teleop-low-cone')">-</button>
+				<input id="teleop-low-cone" type="tel" placeholder="0" value="0" min="0" autocomplete="off">
+				<button class="button-3d green" onclick="increment('teleop-low-cone')">+</button>
+			</div>
+			<div>
+				<h3>Low Row Cube</h3>
+				<button class="button-3d red" onclick="decrement('teleop-low-cube')">-</button>
+				<input id="teleop-low-cube" type="tel" placeholder="0" value="0" min="0" autocomplete="off">
+				<button class="button-3d green" onclick="increment('teleop-low-cube')">+</button>
+			</div>
+			<div>
+				<h3>Picked Up</h3>
+				<button class="button-3d red" onclick="decrement('teleop-picked')">-</button>
+				<input id="teleop-picked" type="tel" placeholder="0" value="0" min="0" autocomplete="off">
+				<button class="button-3d green" onclick="increment('teleop-picked')">+</button>
 			</div>
 		</div>
 		<hr width="100%">
 		<div class="Climb">
 			<h1>Endgame</h1>
 			<h3>Charge Station</h3>
-			<select id="Chargedengame" class="green">
-				<option value="select-event">Select an option...</option>
-				<option value="select-event">Docked and Engaged</option>
-				<option value="select-event">Docked</option>
-				<option value="select-event">Parked</option>
-				<option value="select-event">None of the Above</option>
+			<select id="teleop-charge-station" class="green">
+				<option value="select-status">Select an option...</option>
+				<option value="docked-engaged">Docked and Engaged</option>
+				<option value="docked">Docked</option>
+				<option value="parked">Parked</option>
+				<option value="none">None of the Above</option>
 			</select>
 		</div>
 		<hr width="100%">
@@ -135,16 +184,11 @@
 				<textarea id="notes" cols="0" rows="5" placeholder="Write notes here..."></textarea>
 			</div>
 		</div>
-		<br>
 		<div>
 			<button class="button-3d sky wide" onclick="exportData()">Export!</button>
 		</div>
 		<div>
 			<button class="button-3d green wide" onclick="{window.location = `viewer`}">View Data &#10145;</button>
-		</div>
-		<div>
-			<button class="button-3d green"
-				onclick="{document.getElementById(`mainStyle`).href = `stylecharged.css`}">Switch Themes</button>
 		</div>
 	</div>
 </body>
