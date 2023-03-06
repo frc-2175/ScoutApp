@@ -4,7 +4,7 @@
 // and makes them easy to access, understand and edit.
 
 const checkObject = {
-	"ids": ["event-id", "match-number", "team-number", "auto-taxi", "auto-high-cone", "auto-high-cube", "auto-mid-cone", "auto-mid-cube", "auto-low-cone", "auto-low-cube", "auto-picked", "auto-charge-station", "auto-path", "teleop-high-cone", "teleop-high-cube", "teleop-mid-cone", "teleop-mid-cube", "teleop-low-cone", "teleop-low-cube", "teleop-charge-station"],
+	"ids": ["event-id", "match-number", "team-number", "auto-taxi", "auto-high-cone", "auto-high-cube", "auto-mid-cone", "auto-mid-cube", "auto-low-cone", "auto-low-cube", "auto-picked", "auto-charge-station", "auto-path", "teleop-high-cone", "teleop-high-cube", "teleop-mid-cone", "teleop-mid-cube", "teleop-low-cone", "teleop-low-cube", "teleop-picked", "teleop-charge-station"],
 	"event-id": "val != 0",
 	"match-number": "0 < parseInt(val) && parseInt(val) <= 200",
 	"team-number": "0 < parseInt(val) && parseInt(val) <= 9999",
@@ -24,6 +24,7 @@ const checkObject = {
 	"teleop-mid-cube": "0 <= parseInt(val) && parseInt(val) <= 3",
 	"teleop-low-cone": "0 <= parseInt(val) && parseInt(val) <= 9",
 	"teleop-low-cube": "0 <= parseInt(val) && parseInt(val) <= 27",
+	"teleop-picked": "0 <= parseInt(val) && parseInt(val) <= 27",
 	"teleop-charge-station": "val == 'docked-engaged' || val == 'docked' || val == 'parked' || val =='none'"
 }
 
